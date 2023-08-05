@@ -141,6 +141,7 @@ async function OnSubmit(event){
  try{
    
      const response=await axios.post('http://localhost:2000/user/add-expense',obj)
+     localStorage.setItem('token',response.data.token)
      console.log(obj)
      console.log(response.data.newexpenseDetail)
      showdetails()
@@ -155,8 +156,10 @@ async function OnSubmit(event){
 
 async function showdetails() {
     try {
-        const response = await axios.get('http://localhost:2000/user/get-expense');
+        const token=localStorage.getItem('token')
+        const response = await axios.get('http://localhost:2000/user/get-expense',{header:{"Authorization":token}});
         const data = response.data.allExpenses;
+        
         const tableBody = document.getElementById('expense-table-body');
         tableBody.innerHTML = '';
 
