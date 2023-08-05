@@ -32,19 +32,18 @@ exports.postExpense=async (req, res) => {
 }
 
 
-exports.deleteExpense=async(req,res)=>{
-    try{
-  
-        if(req.params.id=='undefined'){
-            console.log('ID is missing')
-            return res.status(400).json({err:'ID is missing'})
-        }
-    const uId=req.params.id;
-    await Sequelize.destroy({where:{id:uId}})
-        res.sendStatus(200);
-    }
-    catch(err){
-        console.log(err)
-        res.status(500).json(err)
-    }
+exports.deleteExpense=(req, res) => {
+  const expenseid = req.params.expenseid;
+  if(expenseid == undefined || expenseid.length === 0){
+      return res.status(400).json({success: false, })
   }
+  Expense.destroy({where: { id: expenseid, userId: req.user.id }}).then((noofrows) => {
+      if(noofrows === 0){
+          return res.status(404).json({success: false, message: 'Expense doenst belong to the user'})
+      }
+      return res.status(200).json({ success: true, message: "Deleted Successfuly"})
+  }).catch(err => {
+      console.log(err);
+      return res.status(500).json({ success: true, message: "Failed"})
+  })
+}

@@ -10,16 +10,16 @@ router.use(cors())
 router.use(express.static(path.join(__dirname,'public')))
 router.use(express.static(path.join(__dirname, '..', 'views')));
 router.use(bodyParser.urlencoded({extended:false}))
-
+const userauthentication = require('../middleware/auth')
 router.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname,'..','views','index.html'))
 })
 
 
-router.post('/user/add-expense',postExpenseController.postExpense );
+router.post('/user/add-expense',userauthentication.authenticate,postExpenseController.postExpense );
 
-router.get('/user/get-expense',postExpenseController.getExpense)
+router.get('/user/get-expense',userauthentication.authenticate,postExpenseController.getExpense)
 
-router.delete('/user/delete-expense/:id',postExpenseController.deleteExpense)
+router.delete('/user/delete-expense/:id',userauthentication.authenticate,postExpenseController.deleteExpense)
 
 module.exports=router;
