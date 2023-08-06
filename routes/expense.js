@@ -6,11 +6,12 @@ const bodyParser=require('body-parser')
 const postExpenseController=require('../controllers/expense')
 router.use(express.json());
 const cors=require('cors')
+const userauthentication=require('../middleware/auth')
 router.use(cors())
 router.use(express.static(path.join(__dirname,'public')))
 router.use(express.static(path.join(__dirname, '..', 'views')));
 router.use(bodyParser.urlencoded({extended:false}))
-const userauthentication = require('../middleware/auth')
+
 router.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname,'..','views','index.html'))
 })

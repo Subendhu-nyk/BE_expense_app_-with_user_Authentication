@@ -29,8 +29,8 @@
           <a class="navbar-brand fs-1" href="#">Expense Tracker</a>
           <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo03">
             <div class="d-flex">
-              <button class="btn btn-outline-light mx-3">Log In</button>
-              <button class="btn btn-outline-warning me-4">Sign Up</button>
+              
+              <button class="btn btn-outline-warning me-4" onclick="LogOut(event)">Log Out</button>
             </div>
           </div>
         </div>
@@ -139,9 +139,8 @@ async function OnSubmit(event){
  }
  console.log(obj)
  try{
-   
-     const response=await axios.post('http://localhost:2000/user/add-expense',obj)
-     localStorage.setItem('token',response.data.token)
+   const token=localStorage.getItem('token')
+     const response=await axios.post('http://localhost:2000/user/add-expense',obj,{headers:{"Authorization":token}})
      console.log(obj)
      console.log(response.data.newexpenseDetail)
      showdetails()
@@ -157,9 +156,8 @@ async function OnSubmit(event){
 async function showdetails() {
     try {
         const token=localStorage.getItem('token')
-        const response = await axios.get('http://localhost:2000/user/get-expense',{header:{"Authorization":token}});
+        const response = await axios.get('http://localhost:2000/user/get-expense',{headers:{"Authorization":token}});
         const data = response.data.allExpenses;
-        
         const tableBody = document.getElementById('expense-table-body');
         tableBody.innerHTML = '';
 
@@ -195,7 +193,8 @@ async function showdetails() {
      row.appendChild(deletebutton)
      deletebutton.onclick= async ()=>{
          try{
-             const response=await axios.delete(`http://localhost:2000/user/delete-expense/${object.id}`)
+            const token=localStorage.getItem('token')
+             const response=await axios.delete(`http://localhost:2000/user/delete-expense/${object.id}`,{headers:{"Authorization":token}})
              tableBody.removeChild(row)                       
          }
          catch(error){
@@ -239,6 +238,13 @@ async function updateExpense() {
 showdetails();
 
    
+    </script>
+    <script>
+        function LogOut(event){
+            event.preventDefault()
+            console.log("success")
+            window.location.href='/index.html'  
+        }
     </script>
   </body>
 </html>

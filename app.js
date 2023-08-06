@@ -3,8 +3,8 @@ const app=express()
 const path=require('path')
 const bcrypt=require('bcrypt')
 const sequelize=require('./util/expense')
-const Sequelize = require('./models/expense')
-const user=require('./models/user')
+const Expense = require('./models/expense')
+const User=require('./models/user')
 const bodyParser=require('body-parser')
 const router=require('./routes/expense')
 const userRoutes = require('./routes/user')
@@ -19,20 +19,19 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use(router)
 app.use('/user', userRoutes)
 
-user.hasMany(Sequelize);
-Sequelize.belongsTo(user);
 
 
-Sequelize.sync().then((result)=>{
-    console.log(result)
-  })
-
-  user.sync().then((result)=>{
-    console.log(result)
-  })
+User.hasMany(Expense);
+Expense.belongsTo(User);
 
 
-app.listen(2000)
+sequelize.sync()
+    .then(() => {
+        app.listen(2000);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 
 
 

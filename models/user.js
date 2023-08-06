@@ -1,6 +1,6 @@
 const Sequelize=require('sequelize')
 const sequelize=require('../util/expense')
-const user=sequelize.define('user',{
+const User=sequelize.define('user',{
     id:{
         type:Sequelize.INTEGER,
         autoIncrement:true,
@@ -32,4 +32,4 @@ const user=sequelize.define('user',{
 
 })
 
-module.exports=user;
+module.exports=User;
